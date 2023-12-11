@@ -12,7 +12,7 @@ RegisterCommand("spawncar", function(source, args, rawCommand)
     -- Load the vehicle model
     RequestModel(vehicleName)
     while not HasModelLoaded(vehicleName) do
-        Wait(500)
+        delay(500)
     end
 
     -- Get the player's position
