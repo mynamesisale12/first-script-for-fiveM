@@ -1,0 +1,34 @@
+-- Register the command to spawn a car
+RegisterCommand("spawncar", function(source, args, rawCommand)
+    -- Check if the player has provided a vehicle name
+    if #args == 0 then
+        TriggerClientEvent('chatMessage', source, '^1Errore: ^7Utilizzo corretto: /spawncar [nome_del_veicolo]')
+        return
+    end
+
+    -- Get the vehicle name from the command arguments
+    local vehicleName = args[1]
+
+    -- Load the vehicle model
+    RequestModel(vehicleName)
+    while not HasModelLoaded(vehicleName) do
+        Wait(500)
+    end
+
+    -- Get the player's position
+    local playerPed = GetPlayerPed(-1)
+    local pos = GetEntityCoords(playerPed)
+
+    -- Create the vehicle at the player's position
+    local vehicle = CreateVehicle(vehicleName, pos.x, pos.y, pos.z, GetEntityHeading(playerPed), true, false)
+
+    -- Set the player as the driver of the vehicle
+    TaskWarpPedIntoVehicle(playerPed, vehicle, -1)
+
+    -- Display a message in the chat
+    TriggerClientEvent('chatMessage', source, '^2Successo: ^7Hai spawnato un/a ' .. vehicleName)
+end, false)
+
+-- Register the command
+TriggerEvent('chat:clear')
+TriggerEvent('chatMessage', "SYSTEM", {255, 0, 0}, "Script caricato correttamente. Usa /spawncar [nome_del_veicolo] per spawnare un veicolo.")
